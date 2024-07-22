@@ -1,0 +1,26 @@
+{
+  "name": "blogpost-backend",
+  "version": "1.0.0",
+  "description": "Back-end for blogpost",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "backend",
+    "mongodb",
+    "apollo",
+    "server",
+    "graphql",
+    "gatsby",
+    "node.js"
+  ],
+  "author": "Promise Temitope",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.9.0",
+    "mongoose": "^8.5.1"
+  }
+}

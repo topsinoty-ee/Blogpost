@@ -1,0 +1,63 @@
+# @format
+
+type User {
+  _id: ID!
+  username: String!
+  email: String!
+  blogs: [Blog!]
+  posts: [Post!]
+  profilePicture: String
+  bio: String
+}
+
+type Blog {
+  _id: ID!
+  name: String!
+  description: String
+  posts: [Post!]
+  authors: [User!]!
+  coverImage: String
+  published: Boolean
+}
+
+type Post {
+  _id: ID!
+  title: String!
+  content: String
+  blog: Blog!
+  comments: [Comment!]
+  author: User!
+  likeCount: Int!
+  description: String
+}
+
+
+type Comment {
+  _id: ID!
+  content: String!
+  post: Post! 
+  user: User!
+  replies: [Comment!]
+  repliesCount: Int!
+  likeCount: Int!
+}
+
+
+type Query {
+  users: [User]
+  user(query: String!): User
+  blogs: [Blog]
+  blog(id: ID!): Blog # Added ! to the ID field
+  posts: [Post]
+  post(id: ID!): Post # Added ! to the ID field
+  comments: [Comment]
+  comment(id: ID!): Comment # Added ! to the ID field
+}
+
+# Define the Mutation type
+type Mutation {
+  createUser(username: String!, email: String!, password: String!): User
+  createBlog(name: String!, description: String!, authorID: ID!): Blog 
+  createPost(title: String!, content: String!, blogID: ID!): Post
+  createComment(content: String!, postID: ID!, userID: ID!): Comment
+}

@@ -2,9 +2,14 @@
   "name": "blogpost-backend",
   "version": "1.0.0",
   "description": "Back-end for blogpost",
-  "main": "server.ts",
+  "main": "./src/index.ts",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && npm run copy-graphql",
+    "copy-graphql": "copyfiles -u 1 src/**/*.graphql dist",
+    "start": "npm run build && node ./dist/index.js",
+    "generate-gql": "graphql-codegen --config codegen.ts"
   },
   "keywords": [
     "backend",
@@ -16,11 +21,30 @@
     "node.js"
   ],
   "author": "Promise Temitope",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2",
-    "express-graphql": "^0.12.0",
+    "@apollo/client": "^3.11.1",
+    "@apollo/server": "^4.10.5",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
+    "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
+    "graphql-import-node": "^0.0.5",
+    "graphql-tag": "^2.12.6",
+    "mongodb": "^6.8.0",
     "mongoose": "^8.5.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@types/graphql": "^14.2.3",
+    "@types/node": "^20.14.11",
+    "copyfiles": "^2.4.1",
+    "typescript": "^5.5.4",
+    "@graphql-codegen/typescript": "4.0.9",
+    "@graphql-codegen/typescript-resolvers": "4.2.1",
+    "@graphql-codegen/typescript-document-nodes": "4.0.9",
+    "@graphql-codegen/typescript-mongodb": "3.0.0",
+    "@graphql-codegen/introspection": "4.0.3"
   }
 }

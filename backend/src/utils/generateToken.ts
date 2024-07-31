@@ -7,15 +7,14 @@ import type { User } from 'src/generated/types';
 
 dotenv.config();
 
-
-export const generateToken = (user: User): string => {
+export const generateToken = async (user: User): Promise<string> => {
   const { TOKEN_SECRET } = process.env;
   if (!TOKEN_SECRET) {
     console.error('Token secret is not defined');
     throw new AuthenticationError('Token secret is not defined');
   }
 
-  return jwt.sign(
+  return await jwt.sign(
     {
       id: user.userId,
       username: user.username,

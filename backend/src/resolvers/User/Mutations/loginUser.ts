@@ -6,6 +6,8 @@ import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
 import { LoginResponse } from 'src/generated/types.js';
 import { IUser } from '@models/User.js';
+import cookie from 'cookie';
+import { authToken } from '../../../utils/authToken.js';
 
 const validateLoginInput = (
   username: IUser['username'],
@@ -42,15 +44,22 @@ export const loginUser = async (
       throw new AuthenticationError('Invalid password');
     }
 
-    
-
-    const token = generateToken(user);
-
+    const token = await generateToken(user);
+    context.res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        path: '/',
+      })
+    );
+    context.currentUser = authToken(context);
     // Ensure the return structure matches the GraphQL schema
     return {
       user: {
-        ...user.toObject(), 
-        id: user._id.toString(), 
+        ...user.toObject(),
+        id: user._id.toString(),
       },
       token,
     };

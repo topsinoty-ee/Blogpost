@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { Maybe, Blog, Scalars, LoginResponse, Post, SortInput, User, MutationCreateBlogArgs, MutationCreateCommentArgs, MutationCreatePostArgs, MutationCreateUserArgs, MutationLoginUserArgs, QueryBlogArgs, QueryCommentArgs, QueryPostArgs, QueryUserArgs, QueryUsersArgs } from './types';
+import { Maybe, Blog, Scalars, LoginResponse, LogoutResponse, Post, SortInput, User, MutationCreateBlogArgs, MutationCreateCommentArgs, MutationCreatePostArgs, MutationCreateUserArgs, MutationLoginUserArgs, QueryBlogArgs, QueryCommentArgs, QueryPostArgs, QueryUserArgs, QueryUsersArgs } from './types';
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 
 
@@ -79,6 +79,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LimitInput: ResolverTypeWrapper<Scalars['LimitInput']['output']>;
   LoginResponse: ResolverTypeWrapper<LoginResponse>;
+  LogoutResponse: ResolverTypeWrapper<LogoutResponse>;
   Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
@@ -97,6 +98,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int']['output'];
   LimitInput: Scalars['LimitInput']['output'];
   LoginResponse: LoginResponse;
+  LogoutResponse: LogoutResponse;
   Mutation: {};
   Post: Post;
   Query: {};
@@ -138,12 +140,19 @@ export type LoginResponseResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LogoutResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LogoutResponse'] = ResolversParentTypes['LogoutResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createBlog?: Resolver<ResolversTypes['Blog'], ParentType, ContextType, RequireFields<MutationCreateBlogArgs, 'authorID' | 'description' | 'name'>>;
   createComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postID' | 'userID'>>;
   createPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'blogID' | 'content' | 'title'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'password' | 'username'>>;
   loginUser?: Resolver<ResolversTypes['LoginResponse'], ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'password' | 'username'>>;
+  logout?: Resolver<ResolversTypes['LogoutResponse'], ParentType, ContextType>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -191,6 +200,7 @@ export type Resolvers<ContextType = any> = {
   Comment?: CommentResolvers<ContextType>;
   LimitInput?: GraphQLScalarType;
   LoginResponse?: LoginResponseResolvers<ContextType>;
+  LogoutResponse?: LogoutResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

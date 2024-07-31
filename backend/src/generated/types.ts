@@ -44,6 +44,12 @@ export type LoginResponse = {
   user: User;
 };
 
+export type LogoutResponse = {
+  __typename?: 'LogoutResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBlog: Blog;
@@ -51,6 +57,7 @@ export type Mutation = {
   createPost: Post;
   createUser: User;
   loginUser: LoginResponse;
+  logout: LogoutResponse;
 };
 
 

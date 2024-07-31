@@ -67,9 +67,14 @@ type LoginResponse {
 type Mutation {
   createUser(username: String!, email: String!, password: String!): User!
   loginUser(username: String!, password: String!): LoginResponse!
+  logout: LogoutResponse!
   createBlog(name: String!, description: String!, authorID: ID!): Blog!
   createPost(title: String!, content: String!, blogID: ID!): Post!
   createComment(content: String!, postID: ID!, userID: ID!): Comment!
+}
+type LogoutResponse {
+  success: Boolean!
+  message: String!
 }
 
 input SortInput {

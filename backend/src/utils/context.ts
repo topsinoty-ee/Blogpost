@@ -2,12 +2,12 @@
 
 import { User } from '../models/User';
 import { db } from '../database';
-import { User as UserType } from 'src/generated/types';
-import { IncomingMessage } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 
 export interface BaseContext {
   req: IncomingMessage;
-  currentUser?: UserType | null;
+  res: ServerResponse;
+  currentUser?: any | null;
   db: typeof db;
   models: {
     User: typeof User;

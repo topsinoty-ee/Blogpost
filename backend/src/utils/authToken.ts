@@ -3,6 +3,7 @@
 import { BaseContext } from './context.js';
 import { AuthenticationError } from 'apollo-server';
 import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
 
 export const authToken = async (context: BaseContext) => {
   const { TOKEN_SECRET } = process.env;
@@ -11,16 +12,17 @@ export const authToken = async (context: BaseContext) => {
     throw new AuthenticationError('Token secret is not defined');
   }
 
-  const authHeader = context.req.headers.authorization;
-  if (!authHeader) {
-    throw new AuthenticationError('Authorization header must be present.');
+  const cookies = context.req.headers.cookie;
+  if (!cookies) {
+    throw new AuthenticationError('Cookie header must be present.');
   }
 
-  //   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  //   if (!token) {
-  //     throw new AuthenticationError('No token provided.');
-  //   }
-  const token = authHeader;
+  const parsedCookies = cookie.parse(cookies);
+  const token = parsedCookies.token;
+
+  if (!token) {
+    throw new AuthenticationError('Token must be present in cookies.');
+  }
 
   try {
     const user = jwt.verify(token, TOKEN_SECRET) as any;

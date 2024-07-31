@@ -135,8 +135,9 @@ export type QueryUserArgs = {
 
 export type QueryUsersArgs = {
   limit?: InputMaybe<Scalars['LimitInput']['input']>;
+  query: Scalars['String']['input'];
   skip?: InputMaybe<Scalars['SkipInput']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<SortInput>>>;
+  sort?: InputMaybe<Array<SortInput>>;
 };
 
 export type SortInput = {
@@ -150,14 +151,8 @@ export type User = {
   bio?: Maybe<Scalars['String']['output']>;
   blogs?: Maybe<Array<Blog>>;
   email: Scalars['String']['output'];
-  id: Scalars['String']['output'];
   posts?: Maybe<Array<Post>>;
   profilePicture?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['String']['output'];
   username: Scalars['String']['output'];
 };
-
-export type AdditionalEntityFields = {
-  path?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-};
-

@@ -9,12 +9,10 @@ const config: CodegenConfig = {
     'src/generated/types.ts': {
       plugins: [
         'typescript',
-        'typescript-mongodb',
       ],
     },
     'src/generated/resolvers.ts':{
       plugins: [
-        'typescript',
         'typescript-resolvers',
       ],
     },

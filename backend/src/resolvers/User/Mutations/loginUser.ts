@@ -2,25 +2,32 @@
 
 import { UserInputError, AuthenticationError } from 'apollo-server';
 import { compare } from 'bcrypt';
-import { MutationLoginUserArgs } from 'src/generated/resolvers';
+import { MutationLoginUserArgs } from 'src/generated/types'; // Ensure this matches your codeGen output
 import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
 import { LoginResponse } from 'src/generated/types.js';
+import { IUser } from '@models/User.js';
 
-const validateLoginInput = (username: string, password: string) => {
+const validateLoginInput = (
+  username: IUser['username'],
+  password: IUser['password']
+) => {
   if (!username || !password) {
     throw new UserInputError('Username and password are required');
   }
 };
 
-const findUserByUsername = async (models: any, username: string) => {
+const findUserByUsername = async (
+  models: BaseContext['models'],
+  username: IUser['userId']
+): Promise<any | null> => {
   return await models.User.findOne({ username });
 };
 
 export const loginUser = async (
   args: MutationLoginUserArgs,
   context: BaseContext
-):Promise<LoginResponse> => {
+): Promise<LoginResponse> => {
   const { username, password } = args;
 
   try {
@@ -47,8 +54,8 @@ export const loginUser = async (
     // Ensure the return structure matches the GraphQL schema
     return {
       user: {
-        ...user._doc,
-        id: user._id,
+        ...user.toObject(), 
+        id: user._id.toString(), 
       },
       token,
     };

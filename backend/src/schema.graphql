@@ -2,7 +2,7 @@
 
 type User {
   _id: ID!
-  id: String!
+  userId: String!
   username: String!
   email: String!
   blogs: [Blog!]
@@ -44,7 +44,12 @@ type Comment {
 
 type Query {
   me: User!
-  users(sort: [SortInput], limit: LimitInput, skip: SkipInput): [User!]!
+  users(
+    query: String!
+    sort: [SortInput!]
+    limit: LimitInput
+    skip: SkipInput
+  ): [User!]!
   user(query: String!): User
   blogs: [Blog!]!
   blog(id: ID!): Blog

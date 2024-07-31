@@ -2,6 +2,7 @@
 
 type User {
   _id: ID!
+  id: String!
   username: String!
   email: String!
   blogs: [Blog!]
@@ -31,33 +32,45 @@ type Post {
   description: String
 }
 
-
 type Comment {
   _id: ID!
   content: String!
-  post: Post! 
+  post: Post!
   user: User!
   replies: [Comment!]
   repliesCount: Int!
   likeCount: Int!
 }
 
-
 type Query {
-  users: [User]
+  me: User!
+  users(sort: [SortInput], limit: LimitInput, skip: SkipInput): [User!]!
   user(query: String!): User
-  blogs: [Blog]
-  blog(id: ID!): Blog # Added ! to the ID field
-  posts: [Post]
-  post(id: ID!): Post # Added ! to the ID field
-  comments: [Comment]
-  comment(id: ID!): Comment # Added ! to the ID field
+  blogs: [Blog!]!
+  blog(id: ID!): Blog
+  posts: [Post!]!
+  post(id: ID!): Post
+  comments: [Comment!]!
+  comment(id: ID!): Comment
 }
 
-# Define the Mutation type
-type Mutation {
-  createUser(username: String!, email: String!, password: String!): User
-  createBlog(name: String!, description: String!, authorID: ID!): Blog 
-  createPost(title: String!, content: String!, blogID: ID!): Post
-  createComment(content: String!, postID: ID!, userID: ID!): Comment
+type LoginResponse {
+  token: String!
+  user: User!
 }
+
+type Mutation {
+  createUser(username: String!, email: String!, password: String!): User!
+  loginUser(username: String!, password: String!): LoginResponse!
+  createBlog(name: String!, description: String!, authorID: ID!): Blog!
+  createPost(title: String!, content: String!, blogID: ID!): Post!
+  createComment(content: String!, postID: ID!, userID: ID!): Comment!
+}
+
+input SortInput {
+  field: String!
+  order: Int!
+}
+
+scalar LimitInput
+scalar SkipInput

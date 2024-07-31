@@ -1,75 +1,71 @@
 /** @format */
 
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { User as UserModel } from './models/User.js'; // Changed variable name for clarity
+import resolvers from './resolvers/index.js';
+import jwt from 'jsonwebtoken';
 import { readFileSync } from 'fs';
-import { client } from './database.js';
-import { User } from './types/User.js';
-import { users, user } from './resolvers/query/User.js';
-import { Db } from 'mongodb';
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { connectToDatabase, db } from './database.js';
+import { AuthenticationError } from 'apollo-server-errors'; // Updated import
+import { User as UserType } from './generated/types.js'; // Ensure this matches your actual types
+import { BaseContext } from './utils/context.js';
 
-//import TypeDefs from schema
-const typeDefs = readFileSync('src/schema.graphql', 'utf-8');
+// Load and parse the GraphQL schema
+const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
 
+// Ensure the database connection is established before starting the server
+await connectToDatabase();
 
-//make resolvers modular later
-//add mutations to resolvers
-const resolvers = {
-  Query: {
-    users: async (): Promise<User[] | null> => {
-      try {
-        return await users();
-      } catch (error) {
-        console.error('Error fetching users:', error);
-        return null;
-      }
-    },
-    user: async (
-      _: any,
-      { query }: { query: string }
-    ): Promise<User | null> => {
-      try {
-        return await user(query);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        return null;
-      }
-    },
-  },
-};
+// Helper function to transform Mongoose document to GraphQL UserType
+const transformUser = (userDoc: any): UserType => ({
+  ...userDoc.toObject(),
+  _id: userDoc._id.toString(), // Convert ObjectId to string if needed
+});
 
-const server = new ApolloServer({
+// Initialize Apollo Server
+const server = new ApolloServer<BaseContext>({
   typeDefs,
   resolvers,
 });
 
-async function startServer() {
-  let dbClient: Db;
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+  context: async ({ req }): Promise<BaseContext> => {
+    const token = req.headers.authorization || '';
+    let currentUser: UserType | null = null;
 
-  try {
-    dbClient = (await client.connect()).db();
-    console.log('Successfully connected to MongoDB');
+    if (token) {
+      try {
+        const { TOKEN_SECRET } = process.env;
 
-    try {
-      await dbClient.command({ ping: 1 });
-      console.log('Successfully pinged to MongoDB');
-      await dbClient.collections();
+        if (!TOKEN_SECRET) {
+          throw new Error('Missing TOKEN_SECRET environment variable');
+        }
 
-      const { url } = await startStandaloneServer(server, {
-        listen: { port: 4000 },
-        context: async () => {
-          return { db: dbClient };
-        },
-      });
+        const decodedToken = jwt.verify(
+          token.replace('Bearer ', ''),
+          TOKEN_SECRET
+        ) as { id: string };
 
-      console.log(`Server ready at ${url}`);
-    } catch (serverError) {
-      console.error('Error starting Apollo Server:', serverError);
-      process.exit(1);
+        const userDoc = await UserModel.findById(decodedToken.id).exec();
+        if (userDoc) {
+          currentUser = transformUser(userDoc);
+        }
+      } catch (error) {
+        console.error('Error verifying token:', error);
+        throw new AuthenticationError('Invalid or expired token');
+      }
     }
-  } catch (dbError) {
-    console.error('Error connecting to MongoDB:', dbError);
-  }
-}
 
-startServer();
+    return {
+      currentUser,
+      db,
+      models: {
+        User: UserModel, // Use UserModel instead of User
+      },
+    };
+  },
+});
+
+console.log(`🚀 Server ready at ${url}`);

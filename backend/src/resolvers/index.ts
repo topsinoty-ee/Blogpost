@@ -1,31 +1,18 @@
-// import type { Resolver } from "src/generated/graphql";
+/** @format */
 
-// export const resolvers: Resolver = {
-//   Query: {
-//     users: async (parent, args, context) => {
-//       try {
-//         return await context.prisma.users.findMany();
-//       } catch (error) {
-//         console.error('Error fetching users:', error);
-//         throw new Error('Unable to fetch users at this time.');
-//       }
-//     },
+import type { Resolvers } from 'src/generated/resolvers';
+import dotenv from 'dotenv';
+import { UserResolvers } from './User/index.js';
 
-//     user: async (parent, args, context) => {
-//       return context.prisma.user.findUnique({ where: { id: args.id } });
-//     },
-//     blogs: async (parent, args, context) => {
-//       return context.prisma.blogs.findMany();
-//     },
-//     blog: async (parent, args, context) => {
-//       return context.prisma.blog.findUnique({ where: { id: args.id } });
-//     },
-//     posts: async (parent, args, context) => {
-//       return context.prisma.posts.findMany();
-//     },
-//     post: async (parent, args, context) => {
-//       return context.prisma.post.findUnique({ where: { id: args.id } });
-//     },
-//     comments: async(parent, args, context),
-//   },
-// };
+dotenv.config();
+
+const resolvers: Resolvers = {
+  Query: {
+    ...UserResolvers.Query,
+  },
+  Mutation: {
+    ...UserResolvers.Mutation,
+  },
+};
+
+export default resolvers;

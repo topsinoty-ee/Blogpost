@@ -9,7 +9,8 @@
     "build": "tsc && npm run copy-graphql",
     "copy-graphql": "copyfiles -u 1 src/**/*.graphql dist",
     "start": "npm run build && node ./dist/index.js",
-    "generate-gql": "graphql-codegen --config codegen.ts"
+    "generate-gql": "graphql-codegen --config codegen.ts",
+    "dev": "nodemon ./dist/index.js"
   },
   "keywords": [
     "backend",
@@ -28,23 +29,29 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "apollo-server": "^3.13.0",
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "graphql": "^16.9.0",
     "graphql-import-node": "^0.0.5",
-    "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.5.1"
+    "mongoose": "^8.5.1",
+    "retry-async": "^1.1.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "5.0.2",
-    "@types/graphql": "^14.2.3",
-    "@types/node": "^20.14.11",
-    "copyfiles": "^2.4.1",
-    "typescript": "^5.5.4",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/introspection": "4.0.3",
     "@graphql-codegen/typescript": "4.0.9",
-    "@graphql-codegen/typescript-resolvers": "4.2.1",
     "@graphql-codegen/typescript-document-nodes": "4.0.9",
     "@graphql-codegen/typescript-mongodb": "3.0.0",
-    "@graphql-codegen/introspection": "4.0.3"
+    "@graphql-codegen/typescript-resolvers": "4.2.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/graphql": "^14.2.3",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.0.0",
+    "copyfiles": "^2.4.1",
+    "nodemon": "^3.1.4",
+    "typescript": "^5.5.4"
   }
 }

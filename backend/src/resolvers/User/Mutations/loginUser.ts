@@ -1,7 +1,6 @@
 /** @format */
 
 import { UserInputError, AuthenticationError } from 'apollo-server';
-import { compare } from 'bcrypt';
 import { MutationLoginUserArgs } from 'src/generated/types'; // Ensure this matches your codeGen output
 import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
@@ -38,18 +37,14 @@ export const loginUser = async (
       throw new AuthenticationError('User not found');
     }
 
-    const isPasswordValid = await compare(password, user.password);
+    const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       throw new AuthenticationError('Invalid password');
     }
 
-    const { TOKEN_SECRET } = process.env;
-    if (!TOKEN_SECRET) {
-      console.error('Token secret is not defined');
-      throw new AuthenticationError('Token secret is not defined');
-    }
+    
 
-    const token = generateToken(user, TOKEN_SECRET);
+    const token = generateToken(user);
 
     // Ensure the return structure matches the GraphQL schema
     return {

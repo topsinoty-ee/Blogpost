@@ -1,7 +1,7 @@
 /** @format */
 
 import { ObjectId } from 'mongodb';
-import { UserInputError, AuthenticationError } from 'apollo-server';
+import { UserInputError } from 'apollo-server';
 import { MutationCreateUserArgs } from 'src/generated/types';
 import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
@@ -61,13 +61,7 @@ export const createUser = async (
       password,
     });
 
-    const { TOKEN_SECRET } = process.env;
-    if (!TOKEN_SECRET) {
-      console.error('Token secret is not defined');
-      throw new AuthenticationError('Token secret is not defined');
-    }
-
-    const token = generateToken(newUser, TOKEN_SECRET);
+    const token = generateToken(newUser);
 
     return {
       ...newUser._doc,

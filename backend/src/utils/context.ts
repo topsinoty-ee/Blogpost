@@ -1,6 +1,6 @@
 /** @format */
 
-import { User } from '../models/User';
+import { User } from '@models/User';
 import { db } from '../database';
 import { IncomingMessage, ServerResponse } from 'http';
 

@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { connectToDatabase, db } from './database.js';
 import { BaseContext } from './utils/context.js';
-import { authToken } from './utils/authToken.js';
+import TokenManager from './utils/TokenManager.js';
 
 // Load and parse the GraphQL schema
 const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
@@ -21,17 +21,26 @@ const server = new ApolloServer<BaseContext>({
   resolvers,
 });
 
+const getUserFromToken = async (context: BaseContext) => {
+  if (!context) return null;
+  try {
+    const decoded = await TokenManager.authToken(context);
+    const user = await UserModel.findOne({ userId: decoded.id });
+    return user;
+  } catch (error) {
+    console.error('Failed to authenticate user:', error);
+    return null;
+  }
+};
+
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req, res }): Promise<BaseContext> => {
     console.log('Request Headers:', req.headers.cookie);
-    const context = { req, res, db, models: { User: UserModel } };
-    const currentUser = authToken(context);
 
-    return {
-      ...context,
-      currentUser,
-    };
+    const context = { req, res, db, models: { User: UserModel } };
+    let currentUser = getUserFromToken(context);
+    return { ...context, currentUser };
   },
 });
 

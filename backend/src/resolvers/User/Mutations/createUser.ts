@@ -3,10 +3,10 @@
 import { ObjectId } from 'mongodb';
 import { UserInputError } from 'apollo-server';
 import { MutationCreateUserArgs } from 'src/generated/types';
-import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
 import { User } from 'src/generated/types.js';
 import { IUser } from '@models/User.js';
+import TokenManager from '../../../utils/TokenManager.js';
 
 const validateUserInput = (
   password: IUser['password'],
@@ -61,7 +61,7 @@ export const createUser = async (
       password,
     });
 
-    const token = generateToken(newUser);
+    const token = TokenManager.generateToken(newUser);
 
     return {
       ...newUser._doc,

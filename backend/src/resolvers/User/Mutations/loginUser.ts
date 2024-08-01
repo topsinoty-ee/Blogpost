@@ -2,12 +2,10 @@
 
 import { UserInputError, AuthenticationError } from 'apollo-server';
 import { MutationLoginUserArgs } from 'src/generated/types'; // Ensure this matches your codeGen output
-import { generateToken } from '../../../utils/generateToken.js';
 import { BaseContext } from '../../../utils/context.js';
 import { LoginResponse } from 'src/generated/types.js';
 import { IUser } from '@models/User.js';
-import cookie from 'cookie';
-import { authToken } from '../../../utils/authToken.js';
+import TokenManager from '../../../utils/TokenManager.js';
 
 const validateLoginInput = (
   username: IUser['username'],
@@ -44,17 +42,9 @@ export const loginUser = async (
       throw new AuthenticationError('Invalid password');
     }
 
-    const token = await generateToken(user);
-    context.res.setHeader(
-      'Set-Cookie',
-      cookie.serialize('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7, // 1 week
-        path: '/',
-      })
-    );
-    context.currentUser = authToken(context);
+    const token = await TokenManager.generateToken(user);
+    TokenManager.setTokenCookie(context.res, token);
+
     // Ensure the return structure matches the GraphQL schema
     return {
       user: {

@@ -7,13 +7,26 @@ import { LogoutResponse } from 'src/generated/types';
 export const LogoutUser = async (
   context: BaseContext
 ): Promise<LogoutResponse> => {
-  if (!context.currentUser) {
-    throw new Error('User not authenticated');
+  const currentUser = await context.currentUser;
+
+  if (!currentUser) {
+    return {
+      message: 'User not logged in',
+      success: false,
+    };
   }
-  const message = context.currentUser.username + 'is logged out.';
-  await TokenManager.logout(context);
-  return {
-    message: message,
-    success: true,
-  };
+
+  try {
+    console.log('logout', await currentUser);
+    const message = `${currentUser.username} is logged out.`;
+    await TokenManager.logout(context);
+
+    return {
+      message: message,
+      success: true,
+    };
+  } catch (error) {
+    console.error('Logout failed:', error);
+    throw new Error('Logout failed');
+  }
 };

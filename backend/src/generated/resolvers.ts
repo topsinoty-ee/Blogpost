@@ -172,7 +172,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   blogs?: Resolver<Array<ResolversTypes['Blog']>, ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<QueryCommentArgs, 'id'>>;
   comments?: Resolver<Array<ResolversTypes['Comment']>, ParentType, ContextType>;
-  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'query'>>;

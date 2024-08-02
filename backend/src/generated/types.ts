@@ -112,7 +112,7 @@ export type Query = {
   blogs: Array<Blog>;
   comment?: Maybe<Comment>;
   comments: Array<Comment>;
-  me: User;
+  me?: Maybe<User>;
   post?: Maybe<Post>;
   posts: Array<Post>;
   user?: Maybe<User>;

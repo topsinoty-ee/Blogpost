@@ -43,7 +43,7 @@ type Comment {
 }
 
 type Query {
-  me: User!
+  me: User
   users(
     query: String!
     sort: [SortInput!]

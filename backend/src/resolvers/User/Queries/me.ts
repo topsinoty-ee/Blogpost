@@ -13,13 +13,11 @@ export const me = async (context: BaseContext): Promise<User> => {
 
     // Call the authToken function to get the current user
     const decodedUser = await TokenManager.authToken(context);
-    console.log('decoded user: ' , decodedUser);
 
     // Check if user is valid
     if (!decodedUser) {
       throw new Error('User not found');
     }
-    console.log(context.currentUser)
     // Ensure the user conforms to the expected structure
     return context.currentUser;
   } catch (error) {

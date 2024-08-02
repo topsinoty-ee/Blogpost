@@ -59,7 +59,6 @@ class TokenManager {
 
     try {
       const decoded = jwt.verify(token, TokenManager.getTokenSecret()) as any;
-      console.log('token decoded',decoded)
       return decoded;
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {

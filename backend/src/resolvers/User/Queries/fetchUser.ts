@@ -4,7 +4,7 @@ import { UserInputError } from 'apollo-server';
 import { QueryUserArgs } from 'src/generated/types';
 import { BaseContext } from 'src/utils/context';
 
-type UserQueryCondition = {
+export type UserQueryCondition = {
   username?: string;
   id?: string;
   email?: string;

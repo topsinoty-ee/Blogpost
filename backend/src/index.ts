@@ -36,7 +36,6 @@ const getUserFromToken = async (context: BaseContext) => {
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req, res }): Promise<BaseContext> => {
-    console.log('Request Headers:', req.headers.cookie);
 
     const context = { req, res, db, models: { User: UserModel } };
     let currentUser = getUserFromToken(context);

@@ -3,45 +3,67 @@
 import { QueryUsersArgs } from 'src/generated/types';
 import { BaseContext } from 'src/utils/context';
 
+interface UsersQueryCondition {
+  username?: string;
+  id?: string;
+  email?: string;
+  $or?: { [x: string]: RegExp }[];
+}
+
 export const fetchUsers = async (
   models: BaseContext['models'],
   args: QueryUsersArgs
 ) => {
-  const { query = '', sort = [], limit = 0, skip = 0 } = args;
+  const { query, sort = [], limit = 0, skip = 0 } = args;
+
+  let searchCondition: UsersQueryCondition = {};
 
   try {
-    // Create a regex for partial matching
-    const regex = query ? new RegExp(query, 'i') : null;
+    if (query.startsWith('@')) {
+      searchCondition.username = query.substring(1);
+    } else if (query.startsWith('#')) {
+      searchCondition.id = query.substring(1);
+    } else if (query.startsWith('/')) {
+      searchCondition.email = query.substring(1);
+    } else {
+      const regex = query ? new RegExp(query, 'i') : null;
+      if (regex) {
+        const stringFields = Object.keys(models.User.schema.paths).filter(
+          (field) => models.User.schema.paths[field].instance === 'String'
+        );
 
-    // Determine the search conditions
-    const searchConditions = regex
-      ? {
-          $or: Object.keys(models.User.schema.paths)
-            .filter(
-              (field) => models.User.schema.paths[field].instance === 'String'
-            )
-            .map((field) => ({ [field]: regex })),
-        }
-      : {};
+        searchCondition.$or = stringFields.map((field) => ({
+          [field]: regex,
+        }));
+      }
+    }
 
-    // Validate and sanitize the sort parameter
-    const validSort = Array.isArray(sort)
-      ? sort.reduce((acc, { field, order }) => {
-          if (field && [1, -1].includes(order)) {
-            acc[field] = order;
-          }
-          return acc;
-        }, {} as Record<string, number>[])
-      : {};
+    // Construct the query
+    const userQuery = models.User.find(
+      Object.keys(searchCondition).length ? searchCondition : {}
+    );
 
-    // Find users based on the search conditions
-    const users: any[] = await models.User.find(searchConditions)
-      .sort(validSort) // Apply sorting
-      .limit(limit) // Apply limit
-      .skip(skip); // Apply skip
+    // Apply sorting
+    if (sort && sort.length) {
+      userQuery.sort(sort.join(' '));
+    }
+
+    // Apply limit and skip
+    if (limit > 0) {
+      userQuery.limit(limit);
+    }
+    if (skip > 0) {
+      userQuery.skip(skip);
+    }
+
+    // Fetch the users
+    const users:any = await userQuery.exec();
 
     return users;
   } catch (error) {
-    throw new Error('Unable to fetch users at this time. Error: ' + error);
+    throw new Error(
+      `Unable to fetch users at this time. Error: ${error}`
+    );
   }
 };
+

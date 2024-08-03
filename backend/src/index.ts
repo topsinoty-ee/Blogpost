@@ -8,6 +8,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { connectToDatabase, db } from './database.js';
 import { BaseContext } from './utils/context.js';
 import TokenManager from './utils/TokenManager.js';
+import { Blog } from './models/Blog.js';
 
 // Load and parse the GraphQL schema
 const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
@@ -36,7 +37,15 @@ const getUserFromToken = async (context: BaseContext) => {
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
   context: async ({ req, res }): Promise<BaseContext> => {
-    const context = { req, res, db, models: { User: UserModel } };
+    const context = {
+      req,
+      res,
+      db,
+      models: {
+        User: UserModel,
+        Blog: Blog,
+      },
+    };
     let currentUser = getUserFromToken(context);
     return { ...context, currentUser };
   },

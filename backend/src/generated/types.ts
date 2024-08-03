@@ -19,12 +19,12 @@ export type Scalars = {
 export type Blog = {
   __typename?: 'Blog';
   _id: Scalars['ID']['output'];
-  authors: Array<User>;
+  authors: Array<Scalars['ID']['output']>;
   coverImage?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   posts?: Maybe<Array<Post>>;
-  published?: Maybe<Scalars['Boolean']['output']>;
+  published: Scalars['Boolean']['output'];
 };
 
 export type Comment = {
@@ -62,8 +62,7 @@ export type Mutation = {
 
 
 export type MutationCreateBlogArgs = {
-  authorID: Scalars['ID']['input'];
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 

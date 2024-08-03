@@ -3,6 +3,7 @@
 import { User } from '@models/User';
 import { db } from '../database';
 import { IncomingMessage, ServerResponse } from 'http';
+import { Blog } from '@models/Blog';
 
 export interface BaseContext {
   req: IncomingMessage;
@@ -11,5 +12,6 @@ export interface BaseContext {
   db: typeof db;
   models: {
     User: typeof User;
+    Blog: typeof Blog;
   };
 }

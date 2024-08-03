@@ -22,7 +22,7 @@ export type Blog = {
   authors: Array<Scalars['ID']['output']>;
   coverImage?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   posts?: Maybe<Array<Post>>;
   published: Scalars['Boolean']['output'];
 };

@@ -13,7 +13,7 @@ type User {
 
 type Blog {
   _id: ID!
-  name: String!
+  name: String
   description: String
   authors: [ID!]!
   posts: [Post!]

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { Maybe, Blog, Scalars, LoginResponse, LogoutResponse, Post, SortInput, User, MutationCreateBlogArgs, MutationCreateCommentArgs, MutationCreatePostArgs, MutationCreateUserArgs, MutationLoginUserArgs, QueryBlogArgs, QueryCommentArgs, QueryPostArgs, QueryUserArgs, QueryUsersArgs } from './types';
+import type { Maybe, Blog, Scalars, LoginResponse, LogoutResponse, Post, SortInput, User, MutationCreateBlogArgs, MutationCreateCommentArgs, MutationCreatePostArgs, MutationCreateUserArgs, MutationLoginUserArgs, QueryBlogArgs, QueryCommentArgs, QueryPostArgs, QueryUserArgs, QueryUsersArgs } from './types';
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 
 
@@ -113,7 +113,7 @@ export type BlogResolvers<ContextType = any, ParentType extends ResolversParentT
   authors?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   coverImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   posts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
   published?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

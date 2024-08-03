@@ -14,19 +14,25 @@ export const createBlog = async (
     throw new AuthenticationError('Unauthorized - 403');
   }
 
-  const { description, name } = args;
-
   const session = await context.models.Blog.startSession();
   session.startTransaction();
 
   try {
-    const authorIDs = [await currentUser._id];
-    console.log(authorIDs);
+    const authorIDs = [currentUser._id];
+    let name = args.name;
+
+    if (!name) {
+      // If no name is provided, set a default name
+      const blogCount = await context.models.Blog.countDocuments({
+        authors: currentUser._id,
+      }).exec();
+      name = `unnamed #${blogCount + 1}`;
+    }
 
     const newBlog = new context.models.Blog({
       _id: new ObjectId(),
       name,
-      description,
+      description: args.description,
       authors: authorIDs,
     });
 

@@ -3,7 +3,6 @@
 import { Schema, model } from 'mongoose';
 
 const PostSchema = new Schema({
-  id: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   content: { type: String },
   description: { type: String },

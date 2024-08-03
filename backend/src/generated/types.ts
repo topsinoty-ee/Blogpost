@@ -52,10 +52,10 @@ export type LogoutResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createBlog: Blog;
-  createComment: Comment;
-  createPost: Post;
-  createUser: User;
+  createBlog?: Maybe<Blog>;
+  createComment?: Maybe<Comment>;
+  createPost?: Maybe<Post>;
+  createUser?: Maybe<User>;
   loginUser: LoginResponse;
   logout: LogoutResponse;
 };
@@ -96,7 +96,7 @@ export type MutationLoginUserArgs = {
 export type Post = {
   __typename?: 'Post';
   _id: Scalars['ID']['output'];
-  author: User;
+  author: Scalars['ID']['output'];
   blog: Blog;
   comments?: Maybe<Array<Comment>>;
   content?: Maybe<Scalars['String']['output']>;

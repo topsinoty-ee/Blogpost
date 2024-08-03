@@ -4,6 +4,7 @@ import type { Resolvers } from 'src/generated/resolvers';
 import dotenv from 'dotenv';
 import { UserResolvers } from './User/index.js';
 import { BlogResolvers } from './Blog/index.js';
+import { PostResolvers } from './Post/index.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const resolvers: Resolvers = {
   Mutation: {
     ...UserResolvers.Mutation,
     ...BlogResolvers.Mutation,
+    ...PostResolvers.Mutation,
   },
 };
 

@@ -19,15 +19,12 @@ export const createBlog = async (
 
   try {
     const authorIDs = [currentUser._id];
-    let name = args.name;
-
-    if (!name) {
-      // If no name is provided, set a default name
-      const blogCount = await context.models.Blog.countDocuments({
-        authors: currentUser._id,
-      }).exec();
-      name = `unnamed #${blogCount + 1}`;
-    }
+    let name =
+      args.name ||
+      `unnamed #${await context.models.Blog.countDocuments({
+        name: { $regex: /^unnamed #^/ },
+        author: currentUser._id,
+      }).exec()}`;
 
     const newBlog = new context.models.Blog({
       _id: new ObjectId(),
@@ -44,7 +41,6 @@ export const createBlog = async (
 
     // Commit the transaction
     await session.commitTransaction();
-    session.endSession();
 
     // Convert the _id to string before returning
     const blogToReturn: Blog = {
@@ -56,7 +52,8 @@ export const createBlog = async (
   } catch (err) {
     // If an error occurs, abort the transaction
     await session.abortTransaction();
-    session.endSession();
     throw new Error(`Unable to create blog. Error: ${err}`);
+  } finally {
+    session.endSession();
   }
 };

@@ -9,6 +9,7 @@ import { connectToDatabase, db } from './database.js';
 import { BaseContext } from './utils/context.js';
 import TokenManager from './utils/TokenManager.js';
 import { Blog } from './models/Blog.js';
+import { Post } from './models/Post.js';
 
 // Load and parse the GraphQL schema
 const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
@@ -44,6 +45,7 @@ const { url } = await startStandaloneServer(server, {
       models: {
         User: UserModel,
         Blog: Blog,
+        Post: Post
       },
     };
     let currentUser = getUserFromToken(context);

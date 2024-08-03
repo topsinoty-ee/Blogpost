@@ -27,7 +27,7 @@ type Post {
   content: String
   blog: Blog!
   comments: [Comment!]
-  author: User!
+  author: ID!
   likeCount: Int!
   description: String
 }
@@ -65,12 +65,12 @@ type LoginResponse {
 }
 
 type Mutation {
-  createUser(username: String!, email: String!, password: String!): User!
+  createUser(username: String!, email: String!, password: String!): User
   loginUser(username: String!, password: String!): LoginResponse!
   logout: LogoutResponse!
-  createBlog(name: String!, description: String): Blog!
-  createPost(title: String!, content: String!, blogID: ID!): Post!
-  createComment(content: String!, postID: ID!, userID: ID!): Comment!
+  createBlog(name: String!, description: String): Blog
+  createPost(title: String!, content: String!, blogID: ID!): Post
+  createComment(content: String!, postID: ID!, userID: ID!): Comment
 }
 
 type LogoutResponse {

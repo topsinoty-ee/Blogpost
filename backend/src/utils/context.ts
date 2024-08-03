@@ -4,6 +4,7 @@ import { User } from '@models/User';
 import { db } from '../database';
 import { IncomingMessage, ServerResponse } from 'http';
 import { Blog } from '@models/Blog';
+import { Post } from '@models/Post';
 
 export interface BaseContext {
   req: IncomingMessage;
@@ -13,5 +14,6 @@ export interface BaseContext {
   models: {
     User: typeof User;
     Blog: typeof Blog;
+    Post: typeof Post;
   };
 }

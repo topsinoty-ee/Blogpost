@@ -17,7 +17,6 @@ export const LogoutUser = async (
   }
 
   try {
-    console.log('logout', await currentUser);
     const message = `${currentUser.username} is logged out.`;
     await TokenManager.logout(context);
 

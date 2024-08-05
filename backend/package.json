@@ -29,6 +29,8 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@graphql-tools/load-files": "^7.0.0",
+    "@graphql-tools/merge": "^9.0.4",
     "apollo-server": "^3.13.0",
     "bcrypt": "^5.1.1",
     "cookie": "^0.6.0",

@@ -1,0 +1,19 @@
+# @format
+
+type Comment {
+  _id: ID!
+  content: String!
+  postID: ID!
+  userID: ID!
+  replies: [Comment!]
+  repliesCount: Int!
+  likeCount: Int!
+}
+
+type Mutation {
+  createComment(postID: ID!, content: String!): Comment
+  deleteComment(commentID: ID!): Res!
+  likeComment(commentID: ID!): Comment!
+  unlikeComment(commentID: ID!): Comment!
+  replyToComment(commentID: ID!, content: String!): Comment!
+}

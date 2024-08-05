@@ -30,7 +30,7 @@ export const createBlog = async (
       _id: new ObjectId(),
       name,
       description: args.description,
-      authors: authorIDs,
+      authorIDs: authorIDs,
     });
 
     await newBlog.save({ session });

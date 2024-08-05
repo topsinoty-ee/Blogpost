@@ -3,16 +3,13 @@
 import { ApolloServer } from '@apollo/server';
 import { User as UserModel } from './models/User.js'; // Changed variable name for clarity
 import resolvers from './resolvers/index.js';
-import { readFileSync } from 'fs';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { connectToDatabase, db } from './database.js';
 import { BaseContext } from './utils/context.js';
 import TokenManager from './utils/TokenManager.js';
 import { Blog } from './models/Blog.js';
 import { Post } from './models/Post.js';
-
-// Load and parse the GraphQL schema
-const typeDefs = readFileSync('./src/schema.graphql', 'utf-8');
+import { typeDefs } from './schema/index.js';
 
 // Ensure the database connection is established before starting the server
 await connectToDatabase();
@@ -45,7 +42,7 @@ const { url } = await startStandaloneServer(server, {
       models: {
         User: UserModel,
         Blog: Blog,
-        Post: Post
+        Post: Post,
       },
     };
     let currentUser = getUserFromToken(context);

@@ -1,0 +1,28 @@
+# @format
+
+type Post {
+  _id: ID!
+  title: String!
+  content: String
+  blogID: Blog!
+  seriesID: ID
+  tags: [String!]
+  order: Int
+  commentIDs: [ID!]
+  authorID: ID!
+  likeCount: Int!
+  description: String
+  thumbnail: String
+}
+
+type Query {
+  posts: [Post!]
+  post(postID: ID!): Post
+}
+
+type Mutation {
+  createPost(title: String!, content: String!, blogID: ID!, authorID: ID!): Post
+  editPost(post: ID!, title: String, content: String, seriesID: ID): Post
+  deletePost(_id: ID!): Res!
+  addToSeries(seriesID: ID!, post: ID!): Res!
+}

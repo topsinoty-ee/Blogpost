@@ -41,8 +41,8 @@ export const createPost = async (
     const newPost = new context.models.Post({
       _id: new ObjectId(),
       title,
-      blog: blogId, // Use the existing blogId
-      author: currentUser._id,
+      blogID: blogId, // Use the existing blogId
+      authorID: currentUser._id,
       content: args.content,
     });
 

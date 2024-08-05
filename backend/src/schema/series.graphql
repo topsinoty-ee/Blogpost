@@ -1,0 +1,23 @@
+# @format
+
+type Series {
+  BlogID: ID!
+  authorIDs: [ID!]!
+  title: String!
+  postIDs: [ID!]
+  thumbnail: String
+}
+
+type Query {
+  series(blogID: ID!): Series
+  allSeries: [Series!]
+  posts(seriesID: ID!): [Post!]
+}
+
+type Mutation {
+  createSeries(blogID: ID!, title: String!, thumbnail: String): Series
+  editSeries(seriesID: ID!, title: String, thumbnail: String): Series
+  addAuthorToSeries(seriesID: ID!, authorID: ID!): Res
+  removeAuthorFromSeries(seriesID: ID!, authorID: ID!): Res
+  deleteSeries(seriesID: ID!): Res!
+}

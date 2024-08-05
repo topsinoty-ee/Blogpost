@@ -10,7 +10,7 @@ export const UserQueries: QueryResolvers = {
     return await fetchUsers(context.models, args);
   },
   user: async (_, args, context) => {
-    return await fetchUserByQuery(context.models, args.query);
+    return await fetchUserByQuery(context.models, args);
   },
   me: async (_, __, context) => {
     return await me(context);

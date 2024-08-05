@@ -2,7 +2,7 @@
 
 import { BaseContext } from 'src/utils/context';
 import TokenManager from '../../../utils/TokenManager.js';
-import { LogoutResponse } from 'src/generated/types';
+import { Res as LogoutResponse } from 'src/generated/types';
 
 export const LogoutUser = async (
   context: BaseContext

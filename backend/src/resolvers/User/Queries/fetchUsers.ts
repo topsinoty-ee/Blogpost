@@ -49,21 +49,18 @@ export const fetchUsers = async (
     }
 
     // Apply limit and skip
-    if (limit > 0) {
+    if (limit && limit > 0) {
       userQuery.limit(limit);
     }
-    if (skip > 0) {
+    if (skip && skip > 0) {
       userQuery.skip(skip);
     }
 
     // Fetch the users
-    const users:any = await userQuery.exec();
+    const users: any = await userQuery.exec();
 
     return users;
   } catch (error) {
-    throw new Error(
-      `Unable to fetch users at this time. Error: ${error}`
-    );
+    throw new Error(`Unable to fetch users at this time. Error: ${error}`);
   }
 };
-

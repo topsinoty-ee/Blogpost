@@ -13,8 +13,9 @@ export type UserQueryCondition = {
 // Function to fetch a single user based on different criteria
 export const fetchUserByQuery = async (
   models: BaseContext['models'],
-  query: QueryUserArgs['query']
+  args: QueryUserArgs
 ) => {
+  const { query } = args;
   try {
     const conditions: UserQueryCondition[] = [];
 
@@ -39,7 +40,7 @@ export const fetchUserByQuery = async (
       conditions.push({ username: query });
     }
 
-    const user:any = await models.User.findOne({ $or: conditions });
+    const user: any = await models.User.findOne({ $or: conditions });
 
     if (!user) {
       throw new UserInputError('User not found');

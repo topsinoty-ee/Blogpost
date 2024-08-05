@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 
 // Interface extending Document to include our methods
 export interface IUser extends Document {
-  userId?: string; 
+  userId?: string;
   username: string;
   email: string;
   password: string;
@@ -14,7 +14,7 @@ export interface IUser extends Document {
   bio?: string;
   blogs: Schema.Types.ObjectId[];
   posts: Schema.Types.ObjectId[];
-  comparePassword(candidatePassword: string): Promise<boolean>; 
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
@@ -23,7 +23,10 @@ const usernameRegex = /^[a-zA-Z0-9_]{3,16}$/;
 
 const UserSchema: Schema<IUser> = new Schema(
   {
-    userId: { type: String, unique: true }, 
+    userId: {
+      type: String,
+      unique: true,
+    },
     username: {
       type: String,
       required: [true, 'Username is required!'],
@@ -69,6 +72,13 @@ const UserSchema: Schema<IUser> = new Schema(
 
 // Pre-save hook to handle password hashing and custom ID generation
 UserSchema.pre<IUser>('save', async function (next) {
+  if (this.isNew && !this.userId) {
+    const prefix = 'user_';
+    const timestamp = Date.now().toString(36);
+    const randomSuffix = crypto.randomBytes(3).toString('hex');
+    const combined = (timestamp + randomSuffix).slice(-10);
+    this.userId = `${prefix}${combined}`;
+  }
   if (this.isNew || this.isModified('password')) {
     try {
       const saltRounds = await bcrypt.genSalt(12);
@@ -76,14 +86,6 @@ UserSchema.pre<IUser>('save', async function (next) {
     } catch (error) {
       return next(error as Error);
     }
-  }
-
-  if (this.isNew && !this.userId) {
-    const prefix = 'user_';
-    const timestamp = Date.now().toString(36);
-    const randomSuffix = crypto.randomBytes(3).toString('hex');
-    const combined = (timestamp + randomSuffix).slice(-10);
-    this.userId = `${prefix}${combined}`;
   }
   next();
 });

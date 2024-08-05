@@ -1,15 +1,17 @@
 /** @format */
 
 import { ObjectId } from 'mongodb';
-import { UserInputError, AuthenticationError } from 'apollo-server';
-import { MutationCreateUserArgs } from 'src/generated/resolvers';
-import { generateToken } from '../../../utils/generateToken.js';
+import { UserInputError } from 'apollo-server';
+import { MutationCreateUserArgs } from 'src/generated/types';
 import { BaseContext } from '../../../utils/context.js';
+import { User } from 'src/generated/types.js';
+import { IUser } from '@models/User.js';
+import TokenManager from '../../../utils/TokenManager.js';
 
 const validateUserInput = (
-  password: string,
-  username: string,
-  email: string
+  password: IUser['password'],
+  username: IUser['username'],
+  email: IUser['email']
 ) => {
   if (!password || !username || !email) {
     throw new UserInputError('All fields are required');
@@ -17,10 +19,10 @@ const validateUserInput = (
 };
 
 const checkExistingUser = async (
-  models: any,
-  username: string,
-  email: string
-) => {
+  models: BaseContext['models'],
+  username: IUser['username'],
+  email: IUser['email']
+): Promise<User | null> => {
   return await models.User.findOne({ $or: [{ username }, { email }] });
 };
 
@@ -38,7 +40,7 @@ const createNewUser = async (models: any, args: MutationCreateUserArgs) => {
 export const createUser = async (
   args: MutationCreateUserArgs,
   context: BaseContext
-) => {
+): Promise<User> => {
   const { password, username, email } = args;
 
   try {
@@ -59,13 +61,7 @@ export const createUser = async (
       password,
     });
 
-    const { TOKEN_SECRET } = process.env;
-    if (!TOKEN_SECRET) {
-      console.error('Token secret is not defined');
-      throw new AuthenticationError('Token secret is not defined');
-    }
-
-    const token = generateToken(newUser, TOKEN_SECRET);
+    const token = TokenManager.generateToken(newUser);
 
     return {
       ...newUser._doc,

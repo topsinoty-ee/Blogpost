@@ -1,26 +1,32 @@
 /** @format */
 
 import { UserInputError, AuthenticationError } from 'apollo-server';
-import { compare } from 'bcrypt';
-import { MutationLoginUserArgs } from 'src/generated/resolvers';
-import { generateToken } from '../../../utils/generateToken.js';
+import { MutationLoginUserArgs } from 'src/generated/types'; // Ensure this matches your codeGen output
 import { BaseContext } from '../../../utils/context.js';
 import { LoginResponse } from 'src/generated/types.js';
+import { IUser } from '@models/User.js';
+import TokenManager from '../../../utils/TokenManager.js';
 
-const validateLoginInput = (username: string, password: string) => {
+const validateLoginInput = (
+  username: IUser['username'],
+  password: IUser['password']
+) => {
   if (!username || !password) {
     throw new UserInputError('Username and password are required');
   }
 };
 
-const findUserByUsername = async (models: any, username: string) => {
+const findUserByUsername = async (
+  models: BaseContext['models'],
+  username: IUser['userId']
+): Promise<any | null> => {
   return await models.User.findOne({ username });
 };
 
 export const loginUser = async (
   args: MutationLoginUserArgs,
   context: BaseContext
-):Promise<LoginResponse> => {
+): Promise<LoginResponse> => {
   const { username, password } = args;
 
   try {
@@ -31,24 +37,19 @@ export const loginUser = async (
       throw new AuthenticationError('User not found');
     }
 
-    const isPasswordValid = await compare(password, user.password);
+    const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       throw new AuthenticationError('Invalid password');
     }
 
-    const { TOKEN_SECRET } = process.env;
-    if (!TOKEN_SECRET) {
-      console.error('Token secret is not defined');
-      throw new AuthenticationError('Token secret is not defined');
-    }
-
-    const token = generateToken(user, TOKEN_SECRET);
+    const token = await TokenManager.generateToken(user);
+    TokenManager.setTokenCookie(context.res, token);
 
     // Ensure the return structure matches the GraphQL schema
     return {
       user: {
-        ...user._doc,
-        id: user._id,
+        ...user.toObject(),
+        id: user._id.toString(),
       },
       token,
     };

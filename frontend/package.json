@@ -1,9 +1,9 @@
 {
-  "name": "blog-post",
+  "name": "blogpost",
   "version": "1.0.0",
   "private": true,
-  "description": "blog-post",
-  "author": "Promise Temitope",
+  "description": "blogpost",
+  "author": "Oluwatobiloba Promise Temitope",
   "keywords": [
     "gatsby"
   ],
@@ -16,16 +16,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.19",
+    "@apollo/client": "^3.11.2",
     "gatsby": "^5.13.5",
-    "gatsby-plugin-postcss": "^6.13.1",
-    "postcss": "^8.4.39",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwindcss": "^3.4.6"
+    "ts-invariant": "^0.10.3"
   },
   "devDependencies": {
-    "@types/node": "^20.11.19",
+    "@types/node": "^22.1.0",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "typescript": "^5.3.3"

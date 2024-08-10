@@ -1,6 +1,0 @@
-# @format
-
-type Res {
-  success: Boolean!
-  message: String!
-}

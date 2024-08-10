@@ -1,0 +1,55 @@
+# @format
+
+type User {
+  _id: ID!
+  userId: String!
+  username: String!
+  email: String!
+  blogs: [ID!]
+  posts: [ID!]
+  subscribedBlogs: [ID!]
+  followers: [ID!]
+  followedUsers: [ID!]
+  avatar: String
+  bio: String
+  comments: [ID!]
+}
+
+type Query {
+  me: User
+  users(query: String!, sort: [SortInput!], limit: Int, skip: Int): [User!]
+  user(query: String!): User
+}
+
+type Mutation {
+  createUser(username: String!, email: String!, password: String!): User
+  editUser(username: String, email: String, bio: String): User
+  updateProfilePicture(userID: ID!, profilePicture: String!): User
+  deleteUser(userID: ID!, password: String!): Res
+}
+
+type Mutation {
+  followUser(userID: ID!): Res!
+  unFollowUser(userID: ID!): Res!
+}
+
+type Mutation {
+  changePassword(oldPassword: String!, newPassword: String!): User
+  requestPasswordReset(email: String!): Res!
+  resetPassword(token: String!, newPassword: String!): User!
+}
+
+type Mutation {
+  loginUser(username: String!, password: String!): LoginResponse!
+  logout: Res!
+}
+
+type LoginResponse {
+  token: String!
+  user: User!
+}
+
+input SortInput {
+  field: String!
+  order: Int!
+}

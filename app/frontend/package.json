@@ -1,0 +1,39 @@
+{
+  "name": "blogpost",
+  "version": "1.0.0",
+  "private": true,
+  "description": "blogpost",
+  "author": "Oluwatobiloba Promise Temitope",
+  "keywords": [
+    "gatsby"
+  ],
+  "scripts": {
+    "develop": "gatsby develop",
+    "start": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.11.3",
+    "@blogpost/types": "file:../../lib/types",
+    "blogpost": "file:",
+    "frontend": "file:",
+    "gatsby": "^5.13.5",
+    "gatsby-plugin-apollo": "^4.0.3",
+    "gatsby-plugin-typescript": "^5.13.1",
+    "gatsby-source-graphql": "^5.13.1",
+    "graphql": "^16.9.0",
+    "path-browserify": "^1.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.39",
+    "@types/node": "^22.1.0",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.3.3"
+  }
+}

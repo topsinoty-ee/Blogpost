@@ -1,8 +1,12 @@
-/backend/node_modules
-/backend/dist
-/backend/.env
+/node_modules
 
-/frontend/node_modules
-/frontend/.cache/
-/frontend/public
-frontend/src/gatsby-types.d.ts
+/app/backend/node_modules
+/app/backend/dist
+/app/backend/.env
+
+/app/frontend/node_modules
+/app/frontend/.cache/
+/app/frontend/public
+/app/frontend/src/gatsby-types.d.ts
+
+/lib/type/node_modules

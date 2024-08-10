@@ -1,0 +1,32 @@
+# @format
+
+type Blog {
+  _id: ID!
+  name: String
+  description: String
+  owners: [ID!]!
+  posts: [ID!]
+  series: [ID!]
+  subscribers: Int!
+  coverImage: String
+  published: Boolean!
+}
+
+type Mutation {
+  createBlog(name: String!, description: String, coverImage: String): Blog
+  editBlog(
+    id: ID!
+    name: String
+    description: String
+    coverImage: String
+  ): Blog
+  deleteBlog(id: ID!, password: String): Res
+  addAuthors(id: ID!, ownerIDs: [ID!]!): Res
+  removeAuthor(id: ID!, ownerID: ID!): Res
+}
+
+type Query {
+  blogs: [Blog!]!
+  blog(id: ID!): Blog
+  series(blogID: ID!): Series
+}

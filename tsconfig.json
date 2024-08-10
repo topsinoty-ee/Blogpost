@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@blogpost/shared-types": ["lib/types/src/generated/types.ts"],
+    },
+    "strict": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}

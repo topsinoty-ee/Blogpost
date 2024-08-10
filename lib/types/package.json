@@ -1,0 +1,35 @@
+{
+  "name": "@blogpost/types",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "tsc",
+    "generate-gql": "graphql-codegen --config codegen.ts",
+    "prepare": "npm run clean && npm run build && npm run generate-gql"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
+    "@graphql-codegen/typescript-react-query": "^6.1.0",
+    "@graphql-tools/load-files": "^7.0.0",
+    "@graphql-tools/merge": "^9.0.4",
+    "@types/graphql": "^14.2.3",
+    "graphql": "^16.9.0",
+    "rimraf": "^5.0.0",
+    "typescript": "5.5.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@blogpost/types": "file:"
+  }
+}

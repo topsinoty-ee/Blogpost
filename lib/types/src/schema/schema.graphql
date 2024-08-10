@@ -1,0 +1,32 @@
+# @format
+
+type Res {
+  success: Boolean!
+  message: String!
+}
+
+type UserSummary {
+  username: String!
+  postCount: Int!
+  followerCount: Int!
+  avatar: String
+}
+
+type BlogSummary {
+  name: String!
+  postCount: Int!
+  totalLikes: Int!
+  subscribers: Int!
+}
+
+type PostSummary {
+  title: String!
+  author: String!
+  likeCount: Int!
+  commentCount: Int!
+}
+union SearchResult = UserSummary | PostSummary | BlogSummary
+
+type Query {
+  search(query: String!): [SearchResult!]
+}
